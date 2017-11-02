@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Cadastro Aluno</title>
+    </h:head>
+    <h:body>
+       <ui:composition template="../WEB-INF/template/master.xhtml">
+            <ui:define name="principal">
+                <p:panel id="frmTeste" header="#{msg.frmaluno}" footer="Preencha todo o formulário">
+                    <h:form id="form">
+                        <p:panel id="panelForm">
+                            <b:panelGrid columns="2">
+                                <h:outputText value="#{msg.name}" /> 
+                                <p:inputText id="txtNome" value="#{alunoBeans.alu.nome}" required="true" requiredMessage="Insira o nome" />
+                                <h:outputText value="Local de Nascimento: " /> 
+                                <p:inputText value="#{alunoBeans.alu.localNac}" required="true" requiredMessage="Insira o local de nascimento" />
+                                <h:outputText value="Sexo:" />
+                                <p:selectOneButton value="#{alunoBeans.alu.sexo}" required="true" requiredMessage="Informe o sexo:" >
+                                <f:selectItem itemLabel="Masculino" itemValue="M" />
+                                <f:selectItem itemLabel="Feminino" itemValue="F" />
+                                </p:selectOneButton>
+                                <p:outputLabel value="Data de Nascimento"/>
+                                <p:calendar id="multi" value="#{alunoBeans.alu.dataNasc}" locale="de" navigator="true" pattern="MM-dd-yyyy" />
+                                <h:outputText value="Filiação 1:" /> 
+                                <p:inputText value="#{alunoBeans.alu.pai}" required="true" requiredMessage="Informe o nome da filiação:" />
+                                <h:outputText value="Filiação 2:" /> 
+                                <p:inputText value="#{alunoBeans.alu.mae}" required="true" requiredMessage="Informe o nome da filiação:" />
+                                <h:outputText value="Status da Matricula:" /> 
+                                <p:inputText value="#{alunoBeans.alu.status}" required="true" requiredMessage="Informe o stauts da matricula:" />
+                                <h:outputText value="Adicione a foto:" /> 
+                                <p:inputText value="#{alunoBeans.alu.foto}" required="true" requiredMessage="adicione a foto:" />
+                                <h:outputText value="#{msg.email}" /> 
+                                <p:inputText value="#{alunoBeans.alu.email}" required="true" requiredMessage="Insira o email" />
+                                <h:outputText value="#{msg.passwd}" /> 
+                                <p:password value="#{alunoBeans.alu.senha}" required="true" requiredMessage="Insira sua senha" />
+                            </b:panelGrid>
+                             <p:separator />
+                    <b:panelGrid columns="2">
+                                <h:outputText value="Logradouro" /> 
+
+                                <p:inputText id="txtLogradouro" value="#{alunoBeans.end.logradouro}" required="true" requiredMessage="Insira o logradouro" />
+                                
+                                <h:outputText value="Numero" /> 
+                                <p:inputText value="#{alunoBeans.end.numero}" required="true" requiredMessage="Insira o numero" />
+                                <h:outputText value="Complemento" /> 
+                                <p:inputText value="#{alunoBeans.end.complemento}" required="true" requiredMessage="Insira o numero" />
+                                <h:outputText value="Bairro" /> 
+                                <p:inputText value="#{alunoBeans.end.bairro}" required="true" requiredMessage="Insira o numero" />
+                                <h:outputText value="Cidade" /> 
+                                <p:inputText value="#{alunoBeans.end.cidade}" required="true" requiredMessage="Insira o numero" />
+                                
+                                <h:outputText value="CEP" /> 
+                                <p:inputText value="#{alunoBeans.end.cep}" required="true" requiredMessage="Insira o numero" />
+                                <h:outputText value="UF" /> 
+                                <p:inputText value="#{alunoBeans.end.uf}" required="true" requiredMessage="Insira o numero" />
+                            </b:panelGrid>
+                            <p:separator />
+                            <p:separator />
+                            <p:panelGrid columns="1" style="border-style: hidden">
+                                <p:commandButton action="#{alunoBeans.salvar()}" value="Cadastrar"/>
+                                <p:commandButton disabled="true" action="#{alunoBeans.salvar1()}" value="Cadastrar"/>
+                            </p:panelGrid>
+                            <p:messages showDetail="true" rendered="true" autoUpdate="true"/>
+                        </p:panel>
+                    </h:form>
+
+                </p:panel>
+                <p:panelGrid columns="1" style="border-style: hidden">
+
+                    <h:form>
+                        <p:dataTable value="#{alunoBeans.alus}" var="aluno" rows="5" paginator="true">
+                            <p:column>
+                                <f:facet name="header">Nome</f:facet>
+                                #{aluno.nome} </p:column>
+
+                            <p:column><f:facet name="header">Email</f:facet> 
+                                #{aluno.email} </p:column>
+                            <p:column>
+
+                                <f:facet name="header">Remover</f:facet>
+                                <h:commandLink action="#{alunoBeans.excluir(aluno)}">Excluir</h:commandLink>
+                            </p:column>
+                            <p:column>
+
+                                <f:facet name="header">PDF</f:facet>
+                                <p:commandButton action="#{alunoBeans.imprimir(aluno)}" value="Reporte" icon="icon-report" ajax="false"></p:commandButton>
+                               
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </p:panelGrid>
+            </ui:define>
+            <ui:define name="coluna1">
+                Coluna1
+            </ui:define>
+            <ui:define name="coluna2">
+                Coluna2
+            </ui:define>
+            <ui:define name="coluna3">
+                Coluna3
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

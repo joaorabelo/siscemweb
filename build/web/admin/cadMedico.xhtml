@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../WEB-INF/template/master.xhtml">
+            <ui:define name="principal">
+                <p:panel id="frmTeste" header="#{msg.frmmedico}" footer="Preencha todo o formulário">
+                    <h:form id="form">
+                        <p:panel id="panelForm">
+                            <b:panelGrid columns="2">
+                                <h:outputText value="#{msg.name}" /> 
+
+                                <p:inputText id="txtNome" value="#{medicoBeans.nome}" required="true" requiredMessage="Insira o nome" />
+
+                                <h:outputText value="#{msg.email}" /> 
+                                <p:inputText value="#{medicoBeans.email}" required="true" requiredMessage="Insira o email" />
+                                <h:outputText value="#{msg.passwd}" /> 
+                                <p:password value="#{medicoBeans.senha}" required="true" requiredMessage="Insira sua senha" />
+                            </b:panelGrid>
+                            <p:separator />
+                            <p:panelGrid columns="1" style="border-style: hidden">
+                                <p:commandButton action="#{medicoBeans.salvar()}" value="Cadastrar"/>
+                                <p:commandButton action="#{medicoBeans.salvar1()}" value="Cadastrar"/>
+                            </p:panelGrid>
+                            <p:messages showDetail="true" rendered="true" autoUpdate="true"/>
+                        </p:panel>
+                    </h:form>
+
+                </p:panel>
+                <p:panelGrid columns="1" style="border-style: hidden">
+
+                    <h:form>
+                        <p:dataTable value="#{medicoBeans.mds}" var="medico" rows="5" paginator="true">
+                            <p:column>
+                                <f:facet name="header">Nome</f:facet>
+                                #{medico.nome} </p:column>
+
+                            <p:column><f:facet name="header">Email</f:facet> 
+                                #{medico.email} </p:column>
+                            <p:column>
+
+                                <f:facet name="header">Remover</f:facet>
+                                <h:commandLink action="#{medicoBeans.excluir(medico)}">Excluir</h:commandLink>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </p:panelGrid>
+            </ui:define>
+            <ui:define name="coluna1">
+                Coluna1
+            </ui:define>
+            <ui:define name="coluna2">
+                Coluna2
+            </ui:define>
+            <ui:define name="coluna3">
+                Coluna3
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
