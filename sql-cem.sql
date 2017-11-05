@@ -155,4 +155,15 @@ alter table Recuperacoes add constraint fk_rec_disc foreign key (id_disc) refere
 
 alter table Recuperacoes add constraint fk_rec_tur foreign key (id_tur) references Turmas (id_tur);
 
+ create table UserCem
+  (
+    user_id int(3) not null auto_increment,
+    user_data_cadastro date,
+    user_email varchar(200),
+    user_nome varchar(200),
+    user_senha varchar(25),
+    CONSTRAINT UserCem_pkey PRIMARY KEY (user_id ),
+    CONSTRAINT UserCem_email_key UNIQUE (user_email )
+  );
+
 select 'Tabelas criadas com sucesso, \nuse o comando "SHOW TABLES" para visualizar \nas 12 tabelas que foram criadas' AS '';
