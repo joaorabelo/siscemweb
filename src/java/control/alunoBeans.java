@@ -107,7 +107,7 @@ public class alunoBeans {
         alu = new Aluno();
     }
 
-    public String salvar() {
+    public void salvar() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("PJSFPU");
         EntityManager em = emf.createEntityManager();
         alu.setEnd(end);
@@ -117,7 +117,9 @@ public class alunoBeans {
         tx.commit();
         em.close();
         emf.close();
-        return "sucMedico";
+        FacesMessage msg = new FacesMessage("O aluno " + this.alu.getNome() + " foi editado com sucesso");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+       
 
     }
 
@@ -191,6 +193,20 @@ public class alunoBeans {
         tx.commit();
         em.close();
     }
+    
+    public void editar(Aluno alu){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("PJSFPU");
+        EntityManager em = emf.createEntityManager();
+        alu.setEnd(end);
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        em.merge(em.merge(alu));
+        tx.commit();
+        em.close();
+        emf.close();
+        FacesMessage msg = new FacesMessage("O aluno " + this.alu.getNome() + " foi editado com sucesso");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
    
          public void imprimir(Aluno a) {
              
@@ -200,7 +216,7 @@ try {
     PdfWriter.getInstance(document, baos);
 //METADATA
 document.open();
-document.add(new Paragraph(" ESTUDANTES INSCRITOS \n"));
+document.add(new Paragraph(" FICHA DE MATRICULA \n"));
 
 DateFormat formatter= new SimpleDateFormat("dd/MM/yy '-' hh:mm:ss:");
 Date currentDate = new Date();
@@ -212,32 +228,46 @@ document.add(new Paragraph("\n"));
 PdfPTable table = new PdfPTable(6);
 table.setTotalWidth(new float[]{ 20,72, 110, 95, 170, 72 });
 table.setLockedWidth(true);
-PdfPCell cell = new PdfPCell(new Paragraph("Matricula do Aluno" ,
+PdfPCell cell = new PdfPCell(new Paragraph("|ID|       |PAI|         |MÃE|         |NOME|           |STATUS|" ,
 FontFactory.getFont("arial",// fuente
-8,// tamaño
+10,// tamaño
 Font.BOLD, // estilo
-BaseColor.MAGENTA)));
+BaseColor.WHITE)));
 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 cell.setBackgroundColor(BaseColor.GRAY);
 cell.setColspan(6);
 table.addCell(cell);
-
 cell = new PdfPCell(new Paragraph ("ID", FontFactory.getFont("arial",8,Font.BOLD,BaseColor.GRAY )));
-table.addCell("Filiação 1");
-table.addCell("Filiação 2");
-table.addCell("Nome");
-table.addCell("Email");
-table.addCell("Status");
-
 table.addCell(a.getIdMat().toString());
-cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
 table.addCell(a.getPai().toString());
 table.addCell(a.getMae().toString());
 table.addCell(a.getNome());
 table.addCell(a.getEmail());
 table.addCell(a.getStatus());
+PdfPTable tablel = new PdfPTable(6);
+tablel.setTotalWidth(new float[]{ 20,72, 110, 95, 170, 72 });
+tablel.setLockedWidth(true);
+PdfPCell celll = new PdfPCell(new Paragraph("---" ,
+FontFactory.getFont("arial",// fuente
+8,// tamaño
+Font.BOLD, // estilo
+BaseColor.WHITE)));
+celll.setHorizontalAlignment(Element.ALIGN_CENTER);
+celll.setBackgroundColor(BaseColor.GRAY);
+celll.setColspan(6);
+tablel.addCell(celll);
+celll = new PdfPCell(new Paragraph ("ID", FontFactory.getFont("arial",8,Font.BOLD,BaseColor.GRAY )));
+tablel.addCell("Pai");
+tablel.addCell("Mãe");
+tablel.addCell("Nome");
+tablel.addCell("Email");
+tablel.addCell("Status");
+
+
+
 
 document.add(table);
+document.add(tablel);
 } catch (Exception ex) {
 System.out.println("Error " + ex.getMessage());
 }

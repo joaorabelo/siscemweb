@@ -10,10 +10,11 @@
         <title>Cadastro Aluno</title>
     </h:head>
     <h:body>
-       <ui:composition template="../WEB-INF/template/master.xhtml">
+        <ui:composition template="../WEB-INF/template/master.xhtml">
             <ui:define name="principal">
                 <p:panel id="frmTeste" header="#{msg.frmaluno}" footer="Preencha todo o formulário">
                     <h:form id="form">
+                        <p:growl id="msg" showDetail="true"/>
                         <p:panel id="panelForm">
                             <b:panelGrid columns="2">
                                 <h:outputText value="#{msg.name}" /> 
@@ -22,9 +23,9 @@
                                 <p:inputText value="#{alunoBeans.alu.localNac}" required="true" requiredMessage="Insira o local de nascimento" />
                                 <h:outputText value="Sexo:" />
                                 <p:selectOneButton value="#{alunoBeans.alu.sexo}" required="true" requiredMessage="Informe o sexo:" >
-                                <f:selectItem itemLabel="Masculino" itemValue="M" />
-                                <f:selectItem itemLabel="Feminino" itemValue="F" />
-                                </p:selectOneButton>
+                                <f:selectItem itemLabel="Masculino" itemValue="M" />
+                                <f:selectItem itemLabel="Feminino" itemValue="F" />
+                                </p:selectOneButton>
                                 <p:outputLabel value="Data de Nascimento"/>
                                 <p:calendar id="multi" value="#{alunoBeans.alu.dataNasc}" locale="de" navigator="true" pattern="MM-dd-yyyy" />
                                 <h:outputText value="Filiação 1:" /> 
@@ -40,12 +41,12 @@
                                 <h:outputText value="#{msg.passwd}" /> 
                                 <p:password value="#{alunoBeans.alu.senha}" required="true" requiredMessage="Insira sua senha" />
                             </b:panelGrid>
-                             <p:separator />
-                    <b:panelGrid columns="2">
+                            <p:separator />
+                            <b:panelGrid columns="2">
                                 <h:outputText value="Logradouro" /> 
 
                                 <p:inputText id="txtLogradouro" value="#{alunoBeans.end.logradouro}" required="true" requiredMessage="Insira o logradouro" />
-                                
+
                                 <h:outputText value="Numero" /> 
                                 <p:inputText value="#{alunoBeans.end.numero}" required="true" requiredMessage="Insira o numero" />
                                 <h:outputText value="Complemento" /> 
@@ -54,7 +55,7 @@
                                 <p:inputText value="#{alunoBeans.end.bairro}" required="true" requiredMessage="Insira o numero" />
                                 <h:outputText value="Cidade" /> 
                                 <p:inputText value="#{alunoBeans.end.cidade}" required="true" requiredMessage="Insira o numero" />
-                                
+
                                 <h:outputText value="CEP" /> 
                                 <p:inputText value="#{alunoBeans.end.cep}" required="true" requiredMessage="Insira o numero" />
                                 <h:outputText value="UF" /> 
@@ -63,8 +64,8 @@
                             <p:separator />
                             <p:separator />
                             <p:panelGrid columns="1" style="border-style: hidden">
-                                <p:commandButton action="#{alunoBeans.salvar()}" value="Cadastrar"/>
-                                <p:commandButton disabled="true" action="#{alunoBeans.salvar1()}" value="Cadastrar"/>
+                                 <p:commandButton  action="#{alunoBeans.salvar()}" value="Cadastrar" update=":form:msg"/>
+                               
                             </p:panelGrid>
                             <p:messages showDetail="true" rendered="true" autoUpdate="true"/>
                         </p:panel>
@@ -73,38 +74,38 @@
                 </p:panel>
                 <p:panelGrid columns="1" style="border-style: hidden">
 
-                    <h:form>
-                        <p:dataTable value="#{alunoBeans.alus}" var="aluno" rows="5" paginator="true">
+                    <h:form id="formTable">
+                        <p:growl id="msgs" showDetail="true"/>
+                        <p:dataTable id="table" value="#{alunoBeans.alus}" var="aluno" rows="5" paginator="true" editable="true">
+                             <p:ajax event="rowEdit" listener="#{alunoBeans.editar(aluno)}" update=":formTable:msgs" />
+                            <p:column headerText="Nome">
+                                                             <p:cellEditor>
+                                                                     <f:facet name="output"><h:outputText value="#{aluno.nome}" /></f:facet>
+                                                                     <f:facet name="input"><p:inputText id="modelInput" value="#{aluno.nome}" style="width:100%"/></f:facet>
+                                                                  </p:cellEditor>
+                                                             </p:column>
+                            <p:column headerText="Email">
+                                                             <p:cellEditor>
+                                                                     <f:facet name="output"><h:outputText value="#{aluno.email}" /></f:facet>
+                                                                     <f:facet name="input"><p:inputText  value="#{aluno.email}" style="width:100%"/></f:facet>
+                                                                  </p:cellEditor>
+                                                             </p:column>
                             <p:column>
-                                <f:facet name="header">Nome</f:facet>
-                                #{aluno.nome} </p:column>
-
-                            <p:column><f:facet name="header">Email</f:facet> 
-                                #{aluno.email} </p:column>
-                            <p:column>
-
                                 <f:facet name="header">Remover</f:facet>
                                 <h:commandLink action="#{alunoBeans.excluir(aluno)}">Excluir</h:commandLink>
                             </p:column>
-                            <p:column>
 
+                            <p:column>
                                 <f:facet name="header">PDF</f:facet>
                                 <p:commandButton action="#{alunoBeans.imprimir(aluno)}" value="Reporte" icon="icon-report" ajax="false"></p:commandButton>
-                               
                             </p:column>
+                               <p:column style="width:32px">
+                                           <p:rowEditor />
+                               </p:column>
                         </p:dataTable>
                     </h:form>
                 </p:panelGrid>
-            </ui:define>
-            <ui:define name="coluna1">
-                Coluna1
-            </ui:define>
-            <ui:define name="coluna2">
-                Coluna2
-            </ui:define>
-            <ui:define name="coluna3">
-                Coluna3
-            </ui:define>
+                </ui:define>           
         </ui:composition>
     </h:body>
 </html>
