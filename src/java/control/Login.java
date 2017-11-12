@@ -6,9 +6,14 @@
 package control;
 
 import infra.SessionUtil;
+import infra.Usuario;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
@@ -40,17 +45,25 @@ public class Login implements Serializable {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+    
     public String loginUser(){
+        Usuario u = this.valiidar();
         String url = "";
-        if (this.login.equals("admin") && this.senha.equals("admin")) {
+        if (u != null) {
             url = "/admin/principal?faces-redirect=true";
-            Object b = new Object();
-            SessionUtil.setParam("UsuarioLogado", b);
+            SessionUtil.setParam("UsuarioLogado", u);
         } else {
             url = "index?faces-redirect=true";
         }
         return url;
 
+    }
+    
+    private Usuario valiidar() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("PJSFPU");
+        EntityManager em = emf.createEntityManager();
+        Usuario u = new usuarioBeans().getUser(this.login, this.senha);
+        return u;
     }
     
 }
